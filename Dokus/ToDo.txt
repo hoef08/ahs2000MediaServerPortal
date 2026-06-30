@@ -1,0 +1,209 @@
+﻿claude --resume e8f4b42b-ce8c-4dd1-be2f-f993a0eae119
+für madsonic claude --resume 92e09404-d0f7-471c-85ec-b725160f4d8b
+
+Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force
+Get-NetTCPConnection | Select-Object LocalPort, @{Name="Prozess";Expression={(Get-Process -Id $_.OwningProcess).Name}}, State | Sort-Object LocalPort
+
+
+
+  ┌─────────────────────────┬───────────────────────────────────────────────┐
+  │         Aktion          │                      URL                      │
+  ├─────────────────────────┼───────────────────────────────────────────────┤
+  │ Spotify Login           │ http://127.0.0.1:3000/auth/spotify/login      │
+  ├─────────────────────────┼───────────────────────────────────────────────┤
+  │ Tidal Login             │ http://127.0.0.1:3000/auth/tidal/login        │
+  ├─────────────────────────┼───────────────────────────────────────────────┤
+  │ Tidal Streaming (r_usr) │ http://127.0.0.1:3000/auth/tidal/stream/login │
+  ├─────────────────────────┼───────────────────────────────────────────────┤
+  │ Auth-Status prüfen      │ http://127.0.0.1:3000/auth/status             │
+  └─────────────────────────┴───────────────────────────────────────────────┘
+
+   Die Callback-URIs (localhost:3000/auth/spotify/callback und localhost:3000/auth/tidal/callback) müssen so in deinen Developer-Portals registriert sein. Container neu starten nach dem nächsten Build:
+
+http://musik-server:4040/rest/getCoverArt.view?u=admin&t=6965e1fdcdf8a236709acd72eb8136dd&s=cc37d6f2f3a64967&v=1.16.0&c=MeinDelphiClient&f=json&id=ar-3551&size=300
+http://musik-server:4040/rest/getCoverArt.view?u=admin&t=6965e1fdcdf8a236709acd72eb8136dd&s=cc37d6f2f3a64967&v=1.16.0&c=MeinDelphiClient&f=json&id=523087&size=300
+http://musik-server:4040/rest2/getCoverArt.view?u=admin&t=6965e1fdcdf8a236709acd72eb8136dd&s=cc37d6f2f3a64967&v=2.8.0&c=MeinDelphiClient&f=json&id=ar-3551&size=300
+http://musik-server:4040/rest2/getArtists.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json&musicFolderId=0
+http://musik-server:4040/rest2/getArtist.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json&musicFolderId=1&id=3551
+http://musik-server:4040/rest2/getArtistInfo.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json&musicFolderId=1&id=3551&count=20
+http://musik-server:4040/rest2/getArtistInfoID3?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json&musicFolderId=1&id=3551&count=20
+http://musik-server:4040/rest2/getImage.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json&musicFolderId=1&id=3551
+http://musik-server:4040/rest2/getApi.view
+
+http://musik-server:4040/rest2/getMusicFolders.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json
+http://musik-server:4040/rest2/getIndexes.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json&musicFolderId=0
+http://musik-server:4040/rest2/getMusicDirectory.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json&musicFolderId=0&id=523087
+http://musik-server:4040/rest2/getCoverArt.view?u=admin&t=6965e1fdcdf8a236709acd72eb8136dd&s=cc37d6f2f3a64967&v=2.8.0&c=MeinDelphiClient&f=json&id=523087&size=300
+
+
+Debug-Ausgabe: TSubsonicAPI.DoGet : URL : http://musik-server:4040/rest/ping.view?u=admin&t=ef2d00b876777887eaf0cf1511c8d951&s=eb8046ac800e43b2&v=2.0.0&c=MeinDelphiClient&f=json Prozess APITesterV2.exe (44068)
+Debug-Ausgabe: TSubsonicAPI.DoGet : URL : http://musik-server:4040/rest2/ping.view?u=admin&p=admin&v=2.0&c=MeinDelphiClient&f=json
+
+http://musik-server:4040/rest/getPlaylists?u=admin&t=e2e12fe6f8154c3cd2f5de074519853a&s=cce110d6fd07c77a&v=1.16.1&c=MediaServer&f=json
+http://musik-server:4040/rest/getNewAddedSongs?u=admin&t=9d092e53abd52aa5de11cb50c976041e&s=fde16d2b53a7cc64&v=1.16.1&c=MediaServer&f=json&count=10
+	http://musik-server:4040/rest2/getNewaddedSongs.view?u=admin&t=6d9b71ae7ecfab1646d5cd4c11215b4c&s=94d8f2681798737b&v=2.0&c=MediaServer&f=json&count=10
+	http://musik-server:4040/rest2/getTopplayedSongs.view?u=admin&t=6d9b71ae7ecfab1646d5cd4c11215b4c&s=94d8f2681798737b&v=2.0&c=MediaServer&f=json&count=10
+	http://musik-server:4040/rest2/getMostplayedSongs.view?u=admin&t=6d9b71ae7ecfab1646d5cd4c11215b4c&s=94d8f2681798737b&v=2.0&c=MediaServer&f=json&count=10
+	http://musik-server:4040/rest2/getLastplayedSongs.view?u=admin&t=6d9b71ae7ecfab1646d5cd4c11215b4c&s=94d8f2681798737b&v=2.0&c=MediaServer&f=json&count=20
+	
+	Hier sind nur ein paar angepasste Rest-Servicnamen da die Subsonic-Namen ab API 2.0 nicht mehr funktionieren
+	getMostplayedSongs
+	getLastplayedSongs
+	getTopplayedSongs
+	getAlbumListID3 (Ersatz für getAlbumList2)
+	hier kannst du die RestApi nachlesen https://beta.madsonic.org/pages/apiV2.jsp
+	
+http://musik-server:4040/rest/getMostPlayedSongs?u=admin&t=439af706be11d98e01f910c9929b564f&s=3a5f8059c03a9c35&v=1.16.1&c=MediaServer&f=json&count=20
+	
+http://musik-server:4040/rest/getLastPlayedSongs?u=admin&t=b34e33f951d10390dd06f4dda4f3d155&s=c7343ab3092cde55&v=1.16.1&c=MediaServer&f=json&count=20
+	http://musik-server:4040/rest2/getLastplayedSongs.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=2.8.0&c=MeinDelphiClient&f=json
+http://musik-server:4040/rest/getAlbumList2?u=admin&t=87b49dc4c9090e77b613edcc00e0bd69&s=7dba08f968b44bec&v=1.16.1&c=MediaServer&f=json&type=random&size=20
+	http://musik-server:4040/rest2/getAlbumList2?u=admin&t=87b49dc4c9090e77b613edcc00e0bd69&s=7dba08f968b44bec&v=2.0.0&c=MediaServer&f=json&type=random&size=20
+
+1. Hole die MusikFolder
+http://musik-server:4040/rest/getMusicFolders.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=1.16.0&c=MeinDelphiClient&f=json
+2. Hole den Künstlerindex mit der musicFolderId aus 1.
+http://musik-server:4040/rest/getIndexes.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=0 
+3. Hole die Künstlerübersicht mit der id von 2. 
+http://musik-server:4040/rest/getMusicDirectory.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=0&id=523087
+4. Hole das Cover mit der coverArt aus 3.
+http://musik-server:4040/rest/getCoverArt.view?u=admin&t=6965e1fdcdf8a236709acd72eb8136dd&s=cc37d6f2f3a64967&v=1.16.0&c=MeinDelphiClient&f=json&id=523087&size=300
+
+Immer noch keine Künstlercover, hier nochmal der ganaue Weg für die Cover und ALben eines Künstlers für Madsonic
+Der Künstlerindex mit alle Künstlern für die Künstlerliste im Madonic / Künstler Tab
+http://musik-server:4040/rest/getIndexes.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=0 
+auf das Cover für den Künstler kommt man mit der Id aus dem Index-Json-Response von getIndexes mit der artist.id
+http://musik-server:4040/rest/getCoverArt.view?u=admin&t=6965e1fdcdf8a236709acd72eb8136dd&s=cc37d6f2f3a64967&v=1.16.0&c=MeinDelphiClient&f=json&id=523087&size=300 -- z.b. für den Künstler "!Distain" mit der Id 523087
+response von getIndexes
+{
+   "subsonic-response" : {
+      "status" : "ok",
+      "version" : "1.16.0",
+      "type" : "subsonic",
+      "indexes" : {
+         "lastModified" : 1781333774522,
+         "ignoredArticles" : "The El La Los Las Le Les",
+         "index" : [ {
+            "name" : "#",
+            "artist" : [ {
+               "id" : "523087",
+               "name" : "!Distain"
+            }, {
+               "id" : "522109",
+               "name" : "+44"
+            }, {
+               "id" : "523144",
+               "name" : "00 Records"
+            },
+
+auf alle Alben des Künstlers kommt man mit der artist.id aus getIndexes
+http://musik-server:4040/rest/getMusicDirectory.view?u=admin&t=06ac1515dd1627bbcb167380e0a168ac&s=c868f092b6e24431&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=0&id=523087 -- z.b. für den Künstler "!Distain" mit der Id 523087
+response von getMusicDirectory
+{
+   "subsonic-response" : {
+      "status" : "ok",
+      "version" : "1.16.0",
+      "type" : "subsonic",
+      "directory" : {
+         "id" : "523087",
+         "name" : "!Distain",
+         "playCount" : 0,
+         "child" : [ {
+            "id" : "930377",
+            "parent" : "523087",
+            "isDir" : true,
+            "title" : "Wer Im Kreise Geht",
+            "album" : "Wer Im Kreise Geht",
+            "artist" : "!distain",
+            "year" : 2019,
+            "genre" : "Synthpop",
+            "coverArt" : "930377",
+            "path" : "/share/Musik/!Distain/Wer Im Kreise Geht",
+            "playCount" : 0,
+            "created" : "2026-06-06T08:56:46.081Z"
+         }, {
+            "id" : "930370",
+            "parent" : "523087",
+            "isDir" : true,
+            "title" : "Farewell To The Past",
+            "album" : "Farewell To The Past",
+            "artist" : "!distain",
+            "year" : 2018,
+            "genre" : "Synthpop",
+            "coverArt" : "930370",
+            "path" : "/share/Musik/!Distain/Farewell To The Past",
+            "playCount" : 0,
+            "created" : "2026-06-06T08:56:46.074Z"
+         }
+auf die Albumcover kommt man dann mit der coverArt aus dem child response json
+http://musik-server:4040/rest/getCoverArt.view?u=admin&t=6965e1fdcdf8a236709acd72eb8136dd&s=cc37d6f2f3a64967&v=1.16.0&c=MeinDelphiClient&f=json&id=930377&size=300 -- z.b. für das Album "Wer Im Kreise Geht" des Künstlers "!Distain" mit der parent.Id 523087
+
+
+
+
+
+http://musik-server:4041/rest/getArtists.view?u=admin&t=0245acd10d2e5751b2278d77b5f13fc1&s=66561b534c4042a0&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=3
+http://musik-server:4041/rest/getMusicFolders.view?u=admin&t=0245acd10d2e5751b2278d77b5f13fc1&s=66561b534c4042a0&v=1.16.0&c=MeinDelphiClient&f=json
+http://musik-server:4041/rest/getIndexes.view?u=admin&t=0245acd10d2e5751b2278d77b5f13fc1&s=66561b534c4042a0&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=3
+http://musik-server:4041/rest/getMusicDirectory.view?u=admin&t=0245acd10d2e5751b2278d77b5f13fc1&s=66561b534c4042a0&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=3&id=552428
+http://musik-server:4041/rest/getCoverArt.view?u=admin&t=0245acd10d2e5751b2278d77b5f13fc1&s=66561b534c4042a0&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=3&id=552428
+http://musik-server:4041/rest/getCoverArt.view?u=admin&t=0245acd10d2e5751b2278d77b5f13fc1&s=66561b534c4042a0&v=1.16.0&c=MeinDelphiClient&f=json&id=562928
+
+http://musik-server:4041/rest/getArtist.view?u=admin&t=0245acd10d2e5751b2278d77b5f13fc1&s=66561b534c4042a0&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=3&id=552428
+http://musik-server:4041/artistImage.view?id=552428
+http://musik-server:4041/artistImage.view?id=553463
+
+also für Subsonic gibt es für Künstlercover nur den Weg über http://musik-server:4041/rest/getIndexes.view?u=admin&t=0245acd10d2e5751b2278d77b5f13fc1&s=66561b534c4042a0&v=1.16.0&c=MeinDelphiClient&f=json&musicFolderId=3
+und dann wenn vorhanden das Attribut "artistImageUrl"  oder 
+mit http://musik-server:4041/artistImage.view?id=553463 wobei id die Artist.id ist
+Es sind aber nichgt immer Künstlercover vorhanden.
+
+http://musik-server:4042/rest/getArtists.view?u=admin&t=54507fb1ef525a7ae324014b28efde4c&s=6be16783e9e9474b&v=1.15.0&c=MeinDelphiClient&f=json&musicFolderId=0
+http://musik-server:4042/rest/getMusicFolders.view?u=admin&t=54507fb1ef525a7ae324014b28efde4c&s=6be16783e9e9474b&v=1.15.0&c=MeinDelphiClient&f=json
+http://musik-server:4042/rest/getIndexes.view?u=admin&t=54507fb1ef525a7ae324014b28efde4c&s=6be16783e9e9474b&v=1.15.0&c=MeinDelphiClient&f=json&musicFolderId=0
+http://musik-server:4042/rest/getMusicDirectory.view?u=admin&t=54507fb1ef525a7ae324014b28efde4c&s=6be16783e9e9474b&v=1.15.0&c=MeinDelphiClient&f=json&id=141521
+http://musik-server:4042/rest/getArtist.view?u=admin&t=54507fb1ef525a7ae324014b28efde4c&s=6be16783e9e9474b&v=1.15.0&c=MeinDelphiClient&f=json&id=1
+http://musik-server:4042/rest/getCoverArt.view?u=admin&t=54507fb1ef525a7ae324014b28efde4c&s=6be16783e9e9474b&v=1.15.0&c=MeinDelphiClient&f=json&id=ar-78
+
+
+
+
+http://192.168.0.244:8096/Items?userId=6e6c64e97e01400b903421e664ea4be9&ApiToken=938ffed3fdf24e64b5d72887cc0031be&includeItemTypes=MusicAlbum&sortBy=SortName&sortOrder=Ascending&startIndex=0&limit=150&recursive=true&enableUserData=true&enableTotalRecordCount=true
+
+('http://192.168.0.244:8096','938ffed3fdf24e64b5d72887cc0031be','6e6c64e97e01400b903421e664ea4be9','MaMediaStreamer','DelphiDevice','99e1ef3449254766','10.11.0')
+
+Search Term	Search Results
+A	Media files with A or á. For example a search for Derulo will return media files by 'Jason Derulo' and 'Derülo'
++A	Media files with A only (case sensitive). For example a search for Derulo will return media files by 'Jason Derulo' but not 'Derülo'
+"A b"	Media files with A B only. This is useful when you want an exact match using multiple values, like finding media files by 'The The' using "The The".
+A B
+A AND B	Media files with A and B. For example to find media files from 'U2' with the Genre 'Pop' search for U2 AND Pop.
+A OR B
+A ; B	Media files with either A or B. For example to find media files where Genre is 'Children' or 'Kids' search for Children OR Kids.
+A NOT B
+A -B	Media files with A and not B. For example to find media files where Genre is 'Pop', but not 'Christmas' search for Pop NOT Christmas.
+A OR B C OR D -E	Media files with (A OR B) AND (C OR D) NOT E. OR has precedence over AND and NOT.
+<Field>:	Limits the search to a particular field.
+
+Valid fields include: 'Actor', 'Actors', 'Artist', 'Album', 'AlbumArtist', 'Album Artist', 'Composer', 'Conductor', 'Comment', 'Copyright', custom 1 / custom1, custom 2 / custom2, custom 3 / custom3, custom 4 / custom4, custom 5 / custom5, custom 6 / custom6, custom 7 / custom7, custom 8 / custom8, custom 9 / custom9, custom 10 / custom10, 'Director', 'Encoder', 'Genre', 'Grouping', 'Lyricist', 'Lyrics', 'OriginalArtist', 'Original Artist', 'OriginalTitle', 'Original Title', 'OriginalLyricist', 'Original Lyricist', 'Path', 'Producer', 'Publisher', 'Series', 'Screenwriter', 'Title', 'Mood', 'Tempo', 'Occasion', 'Quality', 'InvolvedPeople', 'Involved People', 'Year', 'Origdate', 'Original Date', 'Rating', 'Bpm', 'Disc#', 'Disc number', 'Track', 'Track#', 'Length', 'Bitrate', 'Frequency', 'Played', 'Played #', 'Lastplayed', 'Last Played', 'Channels', 'Leveling'.
+Artist:A	Finds media files with Artist = A.
+
+Other supported fields are: Artist, Album, Album Artist / AlbumArtist, Title, Genre, Path, Composer, Disc#, Lyricist, Conductor, Grouping, Lyrics, Comment, custom 1 / custom1, custom 2 / custom2, custom 3 / custom3, custom 4 / custom4, custom 5 / custom5, custom 6 / custom6, custom 7 / custom7, custom 8 / custom8, custom 9 / custom9, custom 10 / custom10, Original Artist / OriginalArtist, Original Title / OriginalTitle, Original Lyricist / OriginalLyricist, Publisher, Encoder, Copyright, Mood, Tempo, Occasion, Quality, Involved People / InvolvedPeople.
+Year:X..Y	Finds media files with Year ranging X to Y.
+
+Other supported fields are: Year, Original Date / origdate, Rating, bpm, Disc, Track, Length, Bitrate, Frequency, Played# / played, Last Played / lastplayed, Channels, Leveling.
+Rating: X..	Finds media files with rating of X stars or greater.
+',', ':', '.', '_', '(', ')', '[', ']', '&', '@', '#', ' ', '*', '!', '-', ';'	Searches for special characters: returns media files with the special character.
+Search for special characters embedded in a string e.g. 'Help!' : Ignores the special character, and returns all media files containing 'Help'.
+Search for "Help!" : Finds an exact match (doesn't ignore the special character).
+Searches for drive letters (e.g. C: or C:\) are an exception--the ':' is not ignored.
+
+
+
+GET http://{ip_address}:32400/library/sections/{library_id/all?artist.id={artist_id}&type=9&X-Plex-Token={plex_token}&includeGuids={include_guids}&{filter}
+https://192-168-0-244.2c2640f94dde4efa82ce0ceaae1ee336.plex.direct:32400/library/sections/1/all?sort=originallyAvailableAt:desc&type=8
+https://192-168-0-244.2c2640f94dde4efa82ce0ceaae1ee336.plex.direct:32400/library/metadata/312983/children
+
+https://openapi.tidal.com/v2/artists?countryCode=DE&include=albums&filter=[me]: Bad Request
+my-collection/artists
+Body: {"errors":[{"code":"MISSING_REQUIRED_PARAMETER","detail":"Required filter parameter has no value specified"}]}' aufgetreten.

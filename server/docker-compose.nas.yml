@@ -1,0 +1,32 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - TZ=Europe/Zurich
+    ports:
+      - "3001:3000"
+    volumes:
+      - token-cache:/app/data
+    networks:
+      - media-net
+
+  frontend:
+    build: ../frontend
+    restart: unless-stopped
+    ports:
+      - "8181:80"
+      - "9443:443"
+    depends_on:
+      - backend
+    networks:
+      - media-net
+
+networks:
+  media-net:
+
+volumes:
+  token-cache:

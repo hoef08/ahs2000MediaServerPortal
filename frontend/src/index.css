@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-bg-dark: #0f172a;
+  --color-panel-bg: rgba(30, 41, 59, 0.7);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --font-inter: 'Inter', sans-serif;
+  --font-outfit: 'Outfit', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-dark text-white font-inter;
+    background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-panel-bg backdrop-blur-md border border-border rounded-xl shadow-lg;
+  }
+  
+  .premium-btn {
+    @apply px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-medium transition-colors duration-200 flex items-center justify-center gap-2;
+  }
+  
+  .nav-tab {
+    @apply px-4 py-2 text-slate-300 hover:text-white border-b-2 border-transparent transition-colors duration-200 flex items-center gap-2;
+  }
+  
+  .nav-tab.active {
+    @apply text-white border-primary;
+  }
+
+  .coverflow-container {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .coverflow-item {
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    -webkit-box-reflect: below 0px linear-gradient(transparent, transparent 70%, rgba(255,255,255,0.2));
+  }
+}
+
+/* Custom Scrollbar for the table */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2); 
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2); 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4); 
+}
