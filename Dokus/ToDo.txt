@@ -1,5 +1,4 @@
-﻿claude --resume e8f4b42b-ce8c-4dd1-be2f-f993a0eae119
-für madsonic claude --resume 92e09404-d0f7-471c-85ec-b725160f4d8b
+﻿claude --resume 411195d6-8834-4c73-a9ea-e5bac96d407e
 
 Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force
 Get-NetTCPConnection | Select-Object LocalPort, @{Name="Prozess";Expression={(Get-Process -Id $_.OwningProcess).Name}}, State | Sort-Object LocalPort
