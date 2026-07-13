@@ -248,6 +248,13 @@ AIRSONIC_MUSIC_FOLDER_ID=
 LASTFM_API_KEY=
 ```
 
+**Jellyfin: API-Token und User-ID ermitteln**
+
+- `JELLYFIN_API_TOKEN`: Dashboard → Erweitert → API-Schlüssel → neuen Schlüssel anlegen.
+- `JELLYFIN_USER_ID`: Dashboard → Benutzer → gewünschten Benutzer anklicken; in der Browser-Adressleiste steht die GUID im Query-Parameter der URL, z. B.
+  `http://<server>:8096/web/#/useredit.html?userId=3a1b2c3d4e5f...`
+  Alternativ per API abrufen: `GET http://<server>:8096/Users` mit Header `X-Emby-Token: <JELLYFIN_API_TOKEN>` — jeder Eintrag der Antwort enthält seine GUID im Feld `Id`.
+
 ### Laufzeit-Konfiguration (UI)
 
 Über **Einstellungen → Dienste konfigurieren** können alle Service-Parameter (URL, Benutzername, Passwort, API-Version) ohne Neustart der Applikation geändert werden. Die Werte werden in `data/services-config.json` gespeichert und beim nächsten Start geladen (überschreiben die `.env`-Werte).
