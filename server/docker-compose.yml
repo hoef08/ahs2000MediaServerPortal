@@ -10,7 +10,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - token-cache:/app/data
+      # Konfiguration + Tokens liegen auf dem Host in backend/data (services-config.json, *-token.json)
+      - ./backend/data:/app/data
     networks:
       - media-net
 
@@ -27,6 +28,3 @@ services:
 
 networks:
   media-net:
-
-volumes:
-  token-cache:

@@ -160,7 +160,9 @@ docker compose up -d
 
 - Frontend: `http://host:80` / `https://host:443`
 - Backend: `http://host:3000` (intern)
-- Token-/Konfig-Daten werden im Docker-Volume `token-cache` unter `/app/data/` persistiert
+- Konfiguration und Tokens liegen auf dem Host in `server/backend/data/` (Bind-Mount nach `/app/data/`): `services-config.json` (Einstellungen aus der App, haben Vorrang vor `.env`) sowie `spotify-token.json`, `tidal-token.json`, `tidal-streaming-token.json`. Lokal (`npm run dev`) und Docker nutzen damit dieselben Dateien.
+- Änderungen an `.env` oder `data/services-config.json` werden erst nach `docker compose up -d --force-recreate backend` aktiv.
+- In `.env` keine Kommentare hinter Werte schreiben (`KEY=wert # kommentar`): Docker übernimmt den Kommentar als Teil des Werts.
 
 ### QNAP NAS (Ports 80/443 belegt)
 
@@ -174,8 +176,10 @@ scp -r frontend admin@192.168.0.244:/share/Public/mediaserver/
 # Auf der NAS
 ssh admin@192.168.0.244
 cd /share/Public/mediaserver/server
-cp backend/.env.nas-example backend/.env
+cp backend/.env.nas-example backend/.env   # nur bei Erstinstallation
 # backend/.env befüllen
+# backend/data/ (services-config.json + Token-Dateien) wird per scp mitkopiert;
+# so sind Einstellungen und Spotify/Tidal-Logins vom lokalen Rechner direkt übernommen
 docker compose -f docker-compose.nas.yml up -d --build
 ```
 
