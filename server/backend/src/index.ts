@@ -1,4 +1,4 @@
-import Fastify from 'fastify';
+import Fastify, { LogController } from 'fastify';
 import cors from '@fastify/cors';
 import formbody from '@fastify/formbody';
 import { config } from './config.js';
@@ -9,7 +9,7 @@ import { initTidalStreamingAuth }   from './auth/tidalStreaming.js';
 
 const app = Fastify({
   logger: { level: 'warn' },   // pino nur für Warnungen/Fehler
-  disableRequestLogging: true,  // eigene Hooks übernehmen Request-Logging
+  logController: new LogController({ disableRequestLogging: true }),  // eigene Hooks übernehmen Request-Logging
 });
 
 // ---- Request / Response Logging ----
@@ -36,7 +36,7 @@ await registerRoutes(app);
 // Globaler Fehlerhandler
 app.setErrorHandler((err, _req, rep) => {
   app.log.error(err);
-  rep.code(500).send({ success: false, data: null, error: { code: 500, message: err.message } });
+  rep.code(500).send({ success: false, data: null, error: { code: 500, message: err instanceof Error ? err.message : String(err) } });
 });
 
 await initSpotifyAuth();
