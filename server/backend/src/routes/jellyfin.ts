@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { config } from '../config.js';
-import { searchJellyfin, getJellyfinStreamUrl, getJellyfinAlbumTracks, getJellyfinArtistAlbums, getJellyfinHomeSections, getJellyfinPlaylistTracks, browseJellyfinAlbums, browseJellyfinArtists, browseJellyfinTracks, discoverJellyfin, getJellyfinGenres } from '../services/jellyfin.js';
+import { Readable } from 'stream';
+import { searchJellyfin, getJellyfinStreamUrl, jellyfinAuthHeaders, getJellyfinAlbumTracks, getJellyfinArtistAlbums, getJellyfinHomeSections, getJellyfinPlaylistTracks, browseJellyfinAlbums, browseJellyfinArtists, browseJellyfinTracks, discoverJellyfin, getJellyfinGenres } from '../services/jellyfin.js';
 import { okResponse, errorResponse } from '../types/media.js';
 
 const NOT_CONFIGURED = errorResponse(503, 'Jellyfin ist nicht konfiguriert (JELLYFIN_BASE_URL / JELLYFIN_API_TOKEN fehlen)');
@@ -88,11 +89,25 @@ const jellyfin: FastifyPluginAsync = async (app) => {
     } catch (e) { return rep.code(502).send(errorResponse(502, (e as Error).message)); }
   });
 
-  app.get('/jellyfin/stream/:id', (_req, rep) => {
+  // Proxy statt Redirect: Jellyfin 12+ verlangt den Authorization-Header, Token im Query-String reicht nicht mehr
+  app.get('/jellyfin/stream/:id', async (req, rep) => {
     if (!config.jellyfin.enabled) return rep.code(503).send(NOT_CONFIGURED);
-    const { id } = _req.params as { id: string };
+    const { id } = req.params as { id: string };
     try {
-      return rep.redirect(getJellyfinStreamUrl(id));
+      const rangeHeader = req.headers['range'];
+      const upstream = await fetch(getJellyfinStreamUrl(id), {
+        headers: { ...jellyfinAuthHeaders(), ...(rangeHeader ? { Range: rangeHeader } : {}) },
+      });
+      if (!upstream.ok || !upstream.body) {
+        return rep.code(upstream.status || 502).send(errorResponse(upstream.status || 502, `Jellyfin Stream: HTTP ${upstream.status}`));
+      }
+      rep.code(upstream.status);
+      for (const h of ['content-type', 'content-length', 'content-range', 'accept-ranges']) {
+        const v = upstream.headers.get(h);
+        if (v) rep.header(h, v);
+      }
+      rep.header('Cache-Control', 'no-store');
+      return rep.send(Readable.fromWeb(upstream.body as import('stream/web').ReadableStream));
     } catch (e) {
       return rep.code(502).send(errorResponse(502, (e as Error).message));
     }

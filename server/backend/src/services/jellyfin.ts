@@ -4,11 +4,13 @@ import type { MediaTrack, MediaAlbum, MediaArtist, MediaPlaylist, MediaSearchRes
 
 const { baseUrl, apiToken, userId } = config.jellyfin;
 
+// Jellyfin 12+ akzeptiert X-Emby-Token / api_key nicht mehr – nur noch den Authorization-Header
+export function jellyfinAuthHeaders(): Record<string, string> {
+  return { Authorization: `MediaBrowser Client="MediaServer", Device="MediaServer", DeviceId="media-server-backend", Version="1.0.0", Token="${apiToken}"` };
+}
+
 function authHeaders() {
-  return {
-    'X-Emby-Token': apiToken,
-    Accept: 'application/json',
-  };
+  return { ...jellyfinAuthHeaders(), Accept: 'application/json' };
 }
 
 async function apiGet<T>(path: string, params?: Record<string, string>): Promise<T> {
@@ -100,7 +102,6 @@ function normalizeJfPlaylist(i: JfItem): MediaPlaylist {
 
 export function getJellyfinStreamUrl(id: string): string {
   const url = new URL(`${baseUrl}/Audio/${id}/universal`);
-  url.searchParams.set('api_key',             apiToken);
   url.searchParams.set('userId',              userId);
   url.searchParams.set('audioCodec',          'mp3');
   url.searchParams.set('container',           'mp3,aac,ogg,flac');
